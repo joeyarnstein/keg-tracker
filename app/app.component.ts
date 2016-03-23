@@ -1,36 +1,80 @@
-import { Component } from 'angular2/core';
-import {Component, EventEmitter } from 'angular2/core';
-import { TaskListComponent } from './task-list.component';
-import { Task } from './task.model';
+import { Component, EventEmitter } from 'angular2/core';
 
+// @Component({
+//   selector: 'keg-display',
+//   inputs: ['keg'],
+//   template: `
+//   <h3>{{ keg.name }}</h3>
+//   `
+// })
+// export class KegComponent {
+//   public keg: Keg;
+// }
 
-
-
+@Component({
+  selector: 'keg-list',
+  inputs: ['kegList'],
+  outputs: ['fartSalad'],
+  template:
+  `
+    <h3 *ngFor="#keg of kegList"
+      (click)="thizKegOnChild(keg)"
+      [class.selected]="keg === kegBlueTracker">
+      {{keg.name}}
+    </h3>
+  `
+})
+export class KegListerComponent {
+  public kegList: Keg[];
+  public fartSalad: EventEmitter<Keg>;
+  public kegBlueTracker: Keg;
+  constructor(){
+    this.fartSalad = new EventEmitter();
+  }
+  thizKegOnChild(clickedKeg: Keg): void {
+    console.log(clickedKeg);
+    this.kegBlueTracker = clickedKeg;
+    this.fartSalad.emit(clickedKeg);
+  }
+}
 
 @Component({
   selector: 'my-app',
-  directives: [TaskListComponent],
+  directives: [KegListerComponent],
   template: `
-    <div class="container">
-      <h1>To-Do List</h1>
-      <task-list [taskList]="tasks"
-      (onTaskSelect)="taskWasSelected($event)">
-      </task-list>
-    <div>
+    <div class="jumbotron container">
+      <h1>On Tap</h1>
+      <keg-list
+        [kegList]="kegs"
+        (fartSalad)="thizKeg($event)">
+      </keg-list>
+    </div>
   `
 })
 export class AppComponent {
-  public tasks: Task[]; // Task[] (or Array<Task>) identifies tasks as an array of Task objects
-  constructor() {
-    this.tasks = [
-      new Task("Create To-Do List app.", 0);
-      new Task("Learn Kung Fu.", 1),
-      new Task("Rewatch all the Lord of the Rings movies.", 2),
-      new Task("Do the laundry.", 3)
+  public kegs: Keg[];
+  constructor(){
+    this.kegs = [
+      new Keg("Brown Swill", "brown ale", 0),
+      new Keg("Light Swill", "brown ale", 1)
     ];
   }
-  taskWasSelected(clickedTask: Task): void{
-    console.log("parent",clickedTask);
+  thizKeg(clickedKeg: Keg): void {
+    if (clickedKeg === this.kegs[0]){
+      console.log("Nailed it")
+      console.log(clickedKeg);
+    } else {
+      alert("Not so much");
+      console.log(clickedKeg);
+      console.log(this.kegs[0]);
+    }
+  }
+}
+
+export class Keg {
+  public empty: boolean = false;
+  public poursleft: number = 124;
+  constructor(public name: string, public type: string, public id: number){
 
   }
 }
