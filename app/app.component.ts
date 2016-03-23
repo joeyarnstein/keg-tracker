@@ -1,15 +1,15 @@
 import { Component, EventEmitter } from 'angular2/core';
 
-// @Component({
-//   selector: 'keg-display',
-//   inputs: ['keg'],
-//   template: `
-//   <h3>{{ keg.name }}</h3>
-//   `
-// })
-// export class KegComponent {
-//   public keg: Keg;
-// }
+@Component({
+  selector: 'keg-display',
+  inputs: ['keg'],
+  template: `
+  <h3>{{ keg.name }}</h3>
+  `
+})
+export class KegComponent {
+  public keg: Keg;
+}
 
 @Component({
   selector: 'keg-list',
@@ -17,10 +17,10 @@ import { Component, EventEmitter } from 'angular2/core';
   outputs: ['fartSalad'],
   template:
   `
-    <h3 *ngFor="#keg of kegList"
-      (click)="thizKegOnChild(keg)"
-      [class.selected]="keg === kegBlueTracker">
-      {{keg.name}}
+    <h3 *ngFor="#currentKeg of kegList"
+      (click)="thizKegOnChild(currentKeg)"
+      [class.selected]="currentKeg === kegBlueTracker">
+      {{currentKeg.name}}
     </h3>
   `
 })
