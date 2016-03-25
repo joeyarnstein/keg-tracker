@@ -1,0 +1,7 @@
+  <keg-display *ngFor="#currentKeg of kegList"
+    (click)="thizKegOnChild(currentKeg)"
+    [class.selected]="currentKeg === kegBlueTracker"
+    [keg]="currentKeg">
+  </keg-display>
+  <edit-keg-details *ngIf="kegBlueTracker" [keg]="kegBlueTracker"></edit-keg-details>
+  <new-keg (onSubmitNewTask)="createNewKeg($event)"></new-keg>
